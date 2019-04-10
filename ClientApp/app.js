@@ -3,7 +3,7 @@ import axios from 'axios'
 import VueTables from 'vue-tables-2'
 import { sync } from 'vuex-router-sync'
 
-import router from './router/index'
+import router from './router'
 import store from './store'
 import App from './app-root'
 import { FontAwesomeIcon } from './icons'

@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { routes } from '../router/routes'
+import { routes } from '../router'
 
 export default {
   name: 'nav-menu',
