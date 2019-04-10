@@ -15,6 +15,14 @@
 
     <template v-if="forecasts.length">
       <base-table :columns="columns" :data="forecasts" :options="options" />
+      <label>
+        Results per page:
+        <select v-model="pageSize">
+          <option v-for="size in pageSizeOptions" :key="size" :value="size">
+            {{ size }}
+          </option>
+        </select>
+      </label>
       <nav aria-label="...">
         <ul class="pagination justify-content-center">
           <li :class="'page-item' + (currentPage == 1 ? ' disabled' : '')">
@@ -25,7 +33,7 @@
             v-for="(n, index) in totalPages"
             :key="index"
           >
-            <a class="page-link" href="#" @click="loadPage(n)">{{n}}</a>
+            <a class="page-link" href="#" @click="currentPage = n">{{n}}</a>
           </li>
           <li :class="'page-item' + (currentPage < totalPages ? '' : ' disabled')">
             <a class="page-link" href="#" @click="currentPage++">Next</a>
@@ -58,7 +66,8 @@ export default {
         sortable: ["date", "temperatureC", "temperatureF"],
         filterable: ["dateFormatted", "temperatureC", "temperatureF", "summary"]
       },
-      pageSize: 5,
+      pageSizeOptions: [10, 20, 50, 100],
+      pageSize: 10,
       currentPage: 1
     };
   },
@@ -75,15 +84,17 @@ export default {
     currentPage: {
       handler: 'loadPage',
       immediate: true
+    },
+    pageSize: {
+      handler: 'loadPage'
     }
   },
   methods: {
     ...mapActions({
       fetchData: 'weather/fetchForecasts'
     }),
-    loadPage(page) {
-      this.currentPage = page
-      const from = (page - 1) * this.pageSize
+    loadPage() {
+      const from = (this.currentPage - 1) * this.pageSize
       this.fetchData({
         from,
         to: from + this.pageSize
