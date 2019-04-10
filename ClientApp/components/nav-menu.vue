@@ -14,7 +14,7 @@
                 <div :class="'collapse navbar-collapse' + (!collapsed ? ' show':'')" v-show="!collapsed">
                     <ul class="navbar-nav">
                         <li class="nav-item" v-for="(route, index) in routes" :key="index">
-                            <router-link :to="route.path" exact-active-class="active">
+                            <router-link :to="route.path">
                                 <icon :icon="route.icon" class="mr-2 menu-icon" /><span>{{ route.display }}</span>
                             </router-link>
                         </li>
@@ -44,14 +44,14 @@
 </script>
 
 <style lang="scss" scoped>
-    .slide-enter-active, .slide-leave-active {
+  .slide-enter-active, .slide-leave-active {
     transition: max-height .35s
-    }
-    .slide-enter, .slide-leave-to {
+  }
+  .slide-enter, .slide-leave-to {
     max-height: 0px;
-    }
+  }
 
-    .slide-enter-to, .slide-leave {
+  .slide-enter-to, .slide-leave {
     max-height: 20em;
-    }
+  }
 </style>
