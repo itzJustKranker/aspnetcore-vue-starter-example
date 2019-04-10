@@ -34,6 +34,7 @@ namespace Vue2Spa.Controllers
             var allForecasts = _weatherProvider.GetForecasts();
             var result = new
             {
+                Total = allForecasts.Count,
                 Forecasts = allForecasts.Skip(from).Take(quantity).ToArray()
             };
 

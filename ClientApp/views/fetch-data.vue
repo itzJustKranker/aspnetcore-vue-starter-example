@@ -18,7 +18,7 @@
       <nav aria-label="...">
         <ul class="pagination justify-content-center">
           <li :class="'page-item' + (currentPage == 1 ? ' disabled' : '')">
-            <a class="page-link" href="#" tabindex="-1" @click="loadPage(currentPage - 1)">Previous</a>
+            <a class="page-link" href="#" tabindex="-1" @click="currentPage--">Previous</a>
           </li>
           <li
             :class="'page-item' + (n == currentPage ? ' active' : '')"
@@ -28,7 +28,7 @@
             <a class="page-link" href="#" @click="loadPage(n)">{{n}}</a>
           </li>
           <li :class="'page-item' + (currentPage < totalPages ? '' : ' disabled')">
-            <a class="page-link" href="#" @click="loadPage(currentPage + 1)">Next</a>
+            <a class="page-link" href="#" @click="currentPage++">Next</a>
           </li>
         </ul>
       </nav>
@@ -64,14 +64,18 @@ export default {
   },
   computed: {
     ...mapState({
-      forecasts: state => state.weather.forecasts
+      forecasts: state => state.weather.forecasts,
+      total: state => state.weather.total
     }),
     totalPages() {
-      return Math.ceil(this.forecasts.length / this.pageSize)
+      return Math.ceil(this.total / this.pageSize)
     }
   },
-  created() {
-    this.loadPage(1)
+  watch: {
+    currentPage: {
+      handler: 'loadPage',
+      immediate: true
+    }
   },
   methods: {
     ...mapActions({
