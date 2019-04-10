@@ -1,7 +1,7 @@
-import CounterExample from 'components/counter-example'
-import FetchData from 'components/fetch-data'
-import HomePage from 'components/home-page'
-import About from 'components/about'
+import CounterExample from 'views/counter-example'
+import FetchData from 'views/fetch-data'
+import HomePage from 'views/home-page'
+import About from 'views/about'
 
 export const routes = [
   { name: 'home', path: '/', component: HomePage, display: 'Home', icon: 'home' },

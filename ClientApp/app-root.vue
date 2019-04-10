@@ -12,7 +12,7 @@
 </template>
 
 <script>
-    import NavMenu from './nav-menu'
+    import NavMenu from './components/nav-menu'
 
     export default {
       components: {
