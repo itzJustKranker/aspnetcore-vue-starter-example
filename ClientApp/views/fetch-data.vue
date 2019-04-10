@@ -4,7 +4,7 @@
 
     <p>This component demonstrates fetching data from the server.</p>
 
-    <div v-if="!forecasts" class="text-center">
+    <div v-if="!forecasts.length" class="text-center">
       <p>
         <em>Loading...</em>
       </p>
@@ -13,7 +13,7 @@
       </h1>
     </div>
 
-    <template v-if="forecasts">
+    <template v-if="forecasts.length">
       <base-table :columns="columns" :data="forecasts" :options="options" />
       <nav aria-label="...">
         <ul class="pagination justify-content-center">
@@ -37,6 +37,7 @@
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex'
 import BaseTable from '../components/base/BaseTable'
 
 export default {
@@ -57,48 +58,33 @@ export default {
         sortable: ["date", "temperatureC", "temperatureF"],
         filterable: ["dateFormatted", "temperatureC", "temperatureF", "summary"]
       },
-      forecasts: null,
-      total: 0,
       pageSize: 5,
       currentPage: 1
     };
   },
   computed: {
-    totalPages: function() {
-      return Math.ceil(this.total / this.pageSize);
+    ...mapState({
+      forecasts: state => state.weather.forecasts
+    }),
+    totalPages() {
+      return Math.ceil(this.forecasts.length / this.pageSize)
     }
   },
-  async created() {
-    this.loadPage(1);
+  created() {
+    this.loadPage(1)
   },
   methods: {
-    async loadPage(page) {
-      // ES2017 async/await syntax via babel-plugin-transform-async-to-generator
-      // TypeScript can also transpile async/await down to ES5
-      this.currentPage = page;
-
-      try {
-        var from = (page - 1) * this.pageSize;
-        var to = from + this.pageSize;
-        let response = await this.$http.get(
-          `/api/weather/forecasts?from=${from}&to=${to}`
-        );
-        console.log(response.data.forecasts);
-        this.forecasts = response.data.forecasts;
-        this.total = response.data.total;
-      } catch (err) {
-        window.alert(err);
-        console.log(err);
-      }
-      // Old promise-based approach
-      // this.$http
-      //    .get('/api/SampleData/WeatherForecasts')
-      //    .then(response => {
-      //        console.log(response.data)
-      //        this.forecasts = response.data
-      //    })
-      //    .catch((error) => console.log(error))*/
+    ...mapActions({
+      fetchData: 'weather/fetchForecasts'
+    }),
+    loadPage(page) {
+      this.currentPage = page
+      const from = (page - 1) * this.pageSize
+      this.fetchData({
+        from,
+        to: from + this.pageSize
+      })
     }
   }
-};
+}
 </script>
