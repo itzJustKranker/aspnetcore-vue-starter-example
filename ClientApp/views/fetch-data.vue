@@ -10,24 +10,7 @@
         </div>
 
         <template v-if="forecasts">
-            <table class="table">
-                <thead class="dark-bg text-white">
-                    <tr>
-                        <th>Date</th>
-                        <th>Temp. (C)</th>
-                        <th>Temp. (F)</th>
-                        <th>Summary</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr :class="index % 2 == 0 ? 'bg-white' : 'bg-light'" v-for="(forecast, index) in forecasts" :key="index">
-                        <td>{{ forecast.dateFormatted }}</td>
-                        <td>{{ forecast.temperatureC }}</td>
-                        <td>{{ forecast.temperatureF }}</td>
-                        <td>{{ forecast.summary }}</td>
-                    </tr>
-                </tbody>
-            </table>
+            <v-client-table :columns="columns" :data="forecasts" :options="options" />
             <nav aria-label="...">
                 <ul class="pagination justify-content-center">
                     <li :class="'page-item' + (currentPage == 1 ? ' disabled' : '')">
@@ -47,21 +30,33 @@
 
 <script>
 export default {
-  computed: {
-    totalPages: function () {
-      return Math.ceil(this.total / this.pageSize)
-    }
-  },
-
   data () {
     return {
+      columns: ['dateFormatted', 'temperatureC', 'temperatureF', 'summary'],
+      options: {
+        headings: {
+          dateFormatted: 'Date',
+          temperatureC: 'Temp (C)',
+          temperatureF: 'Temp (F)',
+          summary: 'Summary'
+        },
+        sortable: ['date', 'temperatureC', 'temperatureF'],
+        filterable: ['dateFormatted', 'temperatureC', 'temperatureF', 'summary']
+      },
       forecasts: null,
       total: 0,
       pageSize: 5,
       currentPage: 1
     }
   },
-
+  computed: {
+    totalPages: function () {
+      return Math.ceil(this.total / this.pageSize)
+    }
+  },
+  async created () {
+    this.loadPage(1)
+  },
   methods: {
     async loadPage (page) {
       // ES2017 async/await syntax via babel-plugin-transform-async-to-generator
@@ -88,10 +83,6 @@ export default {
       //    })
       //    .catch((error) => console.log(error))*/
     }
-  },
-
-  async created () {
-    this.loadPage(1)
   }
 }
 </script>
