@@ -12,8 +12,7 @@ const mutations = {
 
 const actions = {}
 
-export default {
-  namespaced: true,
+export {
   state,
   getters,
   mutations,
