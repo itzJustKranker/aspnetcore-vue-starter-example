@@ -5,7 +5,7 @@ import { sync } from 'vuex-router-sync'
 
 import router from './router'
 import store from './store'
-import App from './app-root'
+import App from './App'
 import { FontAwesomeIcon } from './icons'
 
 // Registration of global components
