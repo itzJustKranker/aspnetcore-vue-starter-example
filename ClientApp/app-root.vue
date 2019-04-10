@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import NavMenu from './components/nav-menu'
+import NavMenu from './components/NavMenu'
 
 export default {
   name: 'App',

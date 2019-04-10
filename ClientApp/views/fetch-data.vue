@@ -14,7 +14,7 @@
     </div>
 
     <template v-if="forecasts">
-      <v-client-table :columns="columns" :data="forecasts" :options="options"/>
+      <base-table :columns="columns" :data="forecasts" :options="options" />
       <nav aria-label="...">
         <ul class="pagination justify-content-center">
           <li :class="'page-item' + (currentPage == 1 ? ' disabled' : '')">
@@ -37,8 +37,13 @@
 </template>
 
 <script>
+import BaseTable from '../components/BaseTable'
+
 export default {
   name: 'FetchData',
+  components: {
+    BaseTable
+  },
   data() {
     return {
       columns: ["dateFormatted", "temperatureC", "temperatureF", "summary"],
