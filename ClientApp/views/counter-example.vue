@@ -6,7 +6,7 @@
 
     <p>
       Current count (Vuex):
-      <strong>{{ currentCount }}</strong>
+      <strong>{{ count }}</strong>
     </p>
     <p>
       Auto count:
@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapState } from 'vuex'
 
 export default {
   name: 'Counter',
@@ -30,24 +30,22 @@ export default {
   },
   computed: {
     ...mapState({
-      currentCount: state => state.counter
+      count: state => state.counter.counter
     })
-  },
-  methods: {
-    ...mapActions(['setCounter']),
-    incrementCounter: function() {
-      var counter = this.currentCount + 1
-      this.setCounter({ counter: counter })
-    },
-    resetCounter: function() {
-      this.setCounter({ counter: 0 })
-      this.autoCount = 0
-    }
   },
   created() {
     setInterval(() => {
       this.autoCount += 1
     }, 1000)
+  },
+  methods: {
+    incrementCounter() {
+      this.$store.commit('counter/SET_COUNTER', this.count + 1)
+    },
+    resetCounter() {
+      this.$store.commit('counter/SET_COUNTER', 0)
+      this.autoCount = 0
+    }
   }
 }
 </script>
